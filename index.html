@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Гарри Поттер — сложный тест (10 вопросов)</title>
+  <meta name="description" content="Онлайн‑квиз. Откройте ссылку в браузере (iPhone/Android/ПК).">
+  <style>
+    :root { --fg:#111; --bg:#fafafa; --card:#fff; --muted:#666; --accent:#8b5cf6; --ok:#16a34a; --bad:#dc2626; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans','Helvetica Neue',Arial; color:var(--fg); background:linear-gradient(180deg,#f0f4ff,#fafafa); min-height:100vh;}
+    .wrap{max-width:860px; margin:0 auto; padding:24px;}
+    .card{background:var(--card); border-radius:16px; box-shadow:0 10px 20px rgba(0,0,0,.06); padding:20px;}
+    h1{font-size:26px; margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    button{border:0; padding:12px 16px; border-radius:12px; cursor:pointer; font-weight:600}
+    .btn{background:var(--accent); color:white}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+    .btn-secondary{background:#e5e7eb; color:#111}
+    .progress{height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; margin:16px 0 6px}
+    .bar{height:100%; background:var(--accent); width:0%}
+    .q-title{font-size:20px; margin:6px 0 14px}
+    .opt{display:block; border:1.5px solid #e5e7eb; border-radius:12px; padding:12px 14px; margin:10px 0; cursor:pointer; transition:.15s}
+    .opt:hover{border-color:#c7d2fe; background:#f5f8ff}
+    .opt input{margin-right:10px}
+    .opt.correct{border-color:#a7f3d0; background:#ecfdf5}
+    .opt.wrong{border-color:#fecaca; background:#fef2f2}
+    .pill{display:inline-block; font-size:12px; padding:4px 10px; border-radius:999px; background:#eef2ff; color:#3730a3; margin-left:8px}
+    .explain{font-size:14px; color:#374151; padding:10px 12px; background:#f9fafb; border:1px dashed #e5e7eb; border-radius:10px; margin-top:8px}
+    .score{font-size:22px; font-weight:700}
+    footer{margin-top:18px; font-size:12px; color:#6b7280}
+    .hidden{display:none}
+    .spacer{height:8px}
+    .header{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+    .title{display:flex; align-items:center; gap:8px}
+    .badge{font-size:12px; background:#eff6ff; color:#1e40af; padding:4px 8px; border-radius:8px}
+    .review-q{border-top:1px solid #eee; padding-top:12px; margin-top:12px}
+    .ok{color:var(--ok)} .bad{color:var(--bad)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="title">
+        <h1>Гарри Поттер — сложный тест (10 вопросов)</h1>
+        <span class="badge">10 вопросов</span>
+      </div>
+      <div><span class="muted">Онлайн-квиз: откройте ссылку в Safari/Chrome</span></div>
+    </div>
+    <div class="progress"><div id="bar" class="bar"></div></div>
+    <div class="muted" id="progressText">0 / 10</div>
+
+    <div id="screen-start" class="card">
+      <div class="spacer"></div>
+      <label class="muted">Имя участника (необязательно):</label>
+      <input id="playerName" placeholder="Например, Алёна" style="width:100%; padding:12px; border-radius:10px; border:1.5px solid #e5e7eb"/>
+      <div class="spacer"></div>
+      <div class="row">
+        <button id="btnStart" class="btn">Начать</button>
+        <button id="btnShuffle" class="btn-secondary">Перемешать вопросы</button>
+      </div>
+      <footer>Совместимо с QuizGPT: JSON квиза внутри страницы.</footer>
+    </div>
+
+    <div id="screen-quiz" class="card hidden">
+      <div class="muted">Вопрос <span id="qIdx">1</span> из <span id="qTotal">10</span></div>
+      <div class="q-title" id="qTitle"></div>
+      <div id="qOptions"></div>
+      <div class="row" style="margin-top:10px">
+        <button id="btnPrev" class="btn-secondary">Назад</button>
+        <button id="btnNext" class="btn">Далее</button>
+      </div>
+    </div>
+
+    <div id="screen-result" class="card hidden">
+      <div class="row">
+        <div class="score">Результат: <span id="score"></span></div>
+        <div class="pill" id="playerLabel"></div>
+      </div>
+      <div id="review"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="btnRetry">Пройти снова</button>
+        <button class="btn-secondary" id="btnShuffleRetry">Снова и перемешать</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const quiz = {
+  "quizgpt_version": 1,
+  "title": "Гарри Поттер — сложный тест (10 вопросов)",
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "questions": [
+    {
+      "type": "multiple_choice",
+      "question": "Какой из следующих ингредиентов НЕ используется в оборотном зелье (Polyjuice Potion)?",
+      "options": [
+        "Порошок из рога двурога (bicorn horn)",
+        "Измельчённая кожа бумсланга (boomslang skin)",
+        "Цветки наперстянки (foxglove)",
+        "Узколист (knotgrass) и настоянные на месяц крылышки стрекоз (lacewing flies)"
+      ],
+      "correct_index": 2,
+      "explanation": "В Polyjuice входят: knotgrass, lacewing flies (выдержанные), leeches, powdered bicorn horn, shredded boomslang skin, fluxweed (собранный в полнолуние) и часть того, в кого превращаются. Наперстянка не используется.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Кто скрывается за инициалами R.A.B., оставившими записку в ложном медальоне?",
+      "options": [
+        "Руфус Аврелий Скримджер",
+        "Регулус Арктурус Блэк",
+        "Римус Артур Бил",
+        "Реджинальд Альбус Бёрк"
+      ],
+      "correct_index": 1,
+      "explanation": "R.A.B. — Регулус Арктурус Блэк, младший брат Сириуса Блэка.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Какой крестраж был уничтожен четвёртым по хронологии?",
+      "options": [
+        "Дневник Тома Реддла",
+        "Кольцо Марволо Гонта",
+        "Медальон Слизерина",
+        "Кубок Пуффендуй"
+      ],
+      "correct_index": 3,
+      "explanation": "Порядок: Дневник (1993), Кольцо (1996), Медальон (декабрь 1997), затем Кубок Пуффендуй (1 мая 1998 в Хогвартсе), далее Диадема, фрагмент в Гарри, последней — Нагайна.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Что из перечисленного НЕ отображается на карте Мародёров?",
+      "options": [
+        "Перемещения людей по Хогвартсу",
+        "Секретные ходы",
+        "Комната по Требованию",
+        "Подземелья Слизерина"
+      ],
+      "correct_index": 2,
+      "explanation": "Комната по Требованию не отображается на карте; люди внутри тоже не видны.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Какую оценку получил Гарри по Зельеварению на СОВах?",
+      "options": [
+        "Выдающийся (O)",
+        "Превосходный (E)",
+        "Приемлемый (A)",
+        "Досконально (D)"
+      ],
+      "correct_index": 1,
+      "explanation": "Гарри получил E (Exceeds Expectations) по Зельям; O было по ЗОТИ.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Какое заклинание Гермиона наложила на фальшивые галеоны Д.А., чтобы обновления появлялись у всех членов?",
+      "options": [
+        "Geminio",
+        "Muffliato",
+        "Protean Charm (Заклинание Протея)",
+        "Portus"
+      ],
+      "correct_index": 2,
+      "explanation": "Использовано Заклинание Протея — сложная магия уровня НУТ, позволившая синхронизировать номера/сообщения на монетах.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Какой породы дракон охранял хранилище Лестрейнджей в «Гринготтсе»?",
+      "options": [
+        "Венгерская хвосторога (Hungarian Horntail)",
+        "Норвежский хребтоспин (Norwegian Ridgeback)",
+        "Украинский железнобрюх (Ukrainian Ironbelly)",
+        "Уэльский зелёный (Common Welsh Green)"
+      ],
+      "correct_index": 2,
+      "explanation": "Подземелья «Гринготтса» охранял ослеплённый украинский железнобрюх.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Что именно завещал Альбус Дамблдор Гермионе Грейнджер?",
+      "options": [
+        "Делюминатор",
+        "Меч Гриффиндора",
+        "Золотой снитч",
+        "«Сказки Барда Бидля»"
+      ],
+      "correct_index": 3,
+      "explanation": "Гермиона получила «Сказки Барда Бидля», Рон — Делюминатор, Гарри — Снитч (а меч юридически не мог быть завещан).",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Кем приходится Беллатрикс Лестрейндж Нимфадоре Тонкс?",
+      "options": [
+        "Двоюродной сестрой",
+        "Тётей",
+        "Кузиной",
+        "Сватей"
+      ],
+      "correct_index": 1,
+      "explanation": "Беллатрикс — сестра Андромеды Блэк, матери Тонкс; следовательно — тётя.",
+      "difficulty": "hard"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Какова форма патронуса Северуса Снейпа?",
+      "options": [
+        "Олень",
+        "Лань (DOE)",
+        "Собака",
+        "Лисица"
+      ],
+      "correct_index": 1,
+      "explanation": "Патронус Снейпа — лань (самка оленя), отражение его чувств к Лили Эванс.",
+      "difficulty": "hard"
+    }
+  ]
+};
+
+function deepCopy(obj){ return JSON.parse(JSON.stringify(obj)); }
+function shuffleInPlace(arr){
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+let state = {
+  idx: 0,
+  questions: [],
+  answers: [],
+  optionMaps: []
+};
+function prepareQuestions(doShuffleQuestions=true, doShuffleOptions=true){
+  const q = deepCopy(quiz.questions);
+  if(doShuffleQuestions){ shuffleInPlace(q); }
+  state.questions = q;
+  state.answers = new Array(q.length).fill(null);
+  state.optionMaps = q.map(qq => {
+    const map = Array.from(qq.options, (_,i)=>i);
+    if(doShuffleOptions){ shuffleInPlace(map); }
+    return map;
+  });
+  renderProgress();
+}
+function renderProgress(){
+  const total = state.questions.length;
+  const answered = state.answers.filter(x => x !== null).length;
+  document.getElementById('progressText').textContent = answered + " / " + total;
+  const pct = Math.round((answered/Math.max(1,total))*100);
+  document.getElementById('bar').style.width = pct + "%";
+}
+function showScreen(idToShow){
+  for(const id of ['screen-start','screen-quiz','screen-result']){ document.getElementById(id).classList.toggle('hidden', id !== idToShow); }
+}
+function renderQuestion(){
+  document.getElementById('qTotal').textContent = state.questions.length;
+  document.getElementById('qIdx').textContent = (state.idx+1);
+  const q = state.questions[state.idx];
+  document.getElementById('qTitle').textContent = q.question;
+  const container = document.getElementById('qOptions');
+  container.innerHTML = "";
+  const optMap = state.optionMaps[state.idx];
+  const selected = state.answers[state.idx];
+  optMap.forEach((origIndex, dispIndex)=>{
+    const id = `opt_${state.idx}_${dispIndex}`;
+    const label = document.createElement('label');
+    label.className = 'opt';
+    label.innerHTML = `<input type="radio" name="q${state.idx}" id="${id}"> ${q.options[origIndex]}`;
+    container.appendChild(label);
+    const input = label.querySelector('input');
+    input.addEventListener('change', ()=>{ state.answers[state.idx] = dispIndex; renderProgress(); });
+    if(selected === dispIndex){ input.checked = true; }
+  });
+  document.getElementById('btnPrev').disabled = (state.idx === 0);
+  document.getElementById('btnNext').textContent = (state.idx === state.questions.length - 1) ? "Завершить" : "Далее";
+}
+function computeScoreAndReview(){
+  const review = [];
+  let correctCount = 0;
+  for(let i=0;i<state.questions.length;i++){ 
+    const q = state.questions[i];
+    const optMap = state.optionMaps[i];
+    const userDisp = state.answers[i];
+    const userOrig = userDisp === null ? null : optMap[userDisp];
+    const isCorrect = (userOrig === q.correct_index);
+    if(isCorrect) correctCount++;
+    review.push({ q, optMap, userDisp, userOrig, isCorrect });
+  }
+  return { correctCount, review };
+}
+function renderResult(){
+  const { correctCount, review } = computeScoreAndReview();
+  document.getElementById('score').textContent = `${correctCount} / ${state.questions.length}`;
+  const player = document.getElementById('playerName').value.trim();
+  const label = document.getElementById('playerLabel');
+  label.textContent = player ? `Участник: ${player}` : "Аноним";
+  const root = document.getElementById('review');
+  root.innerHTML = "";
+  review.forEach((item, idx)=>{
+    const div = document.createElement('div');
+    div.className = 'review-q';
+    const mark = item.isCorrect ? `<span class="ok">Верно</span>` : `<span class="bad">Неверно</span>`;
+    div.innerHTML = `
+      <div class="muted">Вопрос ${idx+1}</div>
+      <div class="q-title">${item.q.question} ${mark}</div>
+    `;
+    item.optMap.forEach((origIndex, dispIndex)=>{
+      const p = document.createElement('div');
+      p.className = 'opt';
+      p.textContent = item.q.options[origIndex];
+      if(origIndex === item.q.correct_index){ p.classList.add('correct'); }
+      if(item.userDisp === dispIndex && origIndex !== item.q.correct_index){ p.classList.add('wrong'); }
+      div.appendChild(p);
+    });
+    if(item.q.explanation){
+      const ex = document.createElement('div');
+      ex.className = 'explain';
+      ex.textContent = item.q.explanation;
+      div.appendChild(ex);
+    }
+    root.appendChild(div);
+  });
+}
+document.getElementById('btnStart').addEventListener('click', ()=>{ prepareQuestions(quiz.shuffle_questions, quiz.shuffle_options); showScreen('screen-quiz'); renderQuestion(); });
+document.getElementById('btnShuffle').addEventListener('click', ()=>{ prepareQuestions(true, true); alert('Вопросы и варианты будут перемешаны при старте.'); });
+document.getElementById('btnPrev').addEventListener('click', ()=>{ if(state.idx>0){ state.idx--; renderQuestion(); } });
+document.getElementById('btnNext').addEventListener('click', ()=>{ if(state.idx === state.questions.length-1){ showScreen('screen-result'); renderResult(); } else { state.idx++; renderQuestion(); } });
+document.getElementById('btnRetry').addEventListener('click', ()=>{ state.idx = 0; state.answers.fill(null); renderProgress(); showScreen('screen-quiz'); renderQuestion(); });
+document.getElementById('btnShuffleRetry').addEventListener('click', ()=>{ prepareQuestions(true, true); state.idx = 0; showScreen('screen-quiz'); renderQuestion(); });
+</script>
+</body>
+</html>
