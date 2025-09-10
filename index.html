@@ -1,394 +1,158 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Гарри Поттер — тест с изображениями (10 вопросов)</title>
-  <meta name="description" content="Онлайн‑квиз с изображениями. Готов для GitHub Pages и Telegram Mini App.">
-  <style>
-    :root { --fg:#111; --bg:#fafafa; --card:#fff; --muted:#667085; --accent:#8b5cf6; --ok:#16a34a; --bad:#dc2626; }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans','Helvetica Neue',Arial; color:var(--fg); background:linear-gradient(180deg,#eef2ff,#fafafa); min-height:100vh;}
-    .wrap{max-width:900px; margin:0 auto; padding:24px;}
-    .card{background:var(--card); border-radius:16px; box-shadow:0 10px 20px rgba(0,0,0,.06); padding:20px;}
-    h1{font-size:26px; margin:0 0 8px}
-    .muted{color:var(--muted)}
-    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
-    button{border:0; padding:12px 16px; border-radius:12px; cursor:pointer; font-weight:600}
-    .btn{background:var(--accent); color:white}
-    .btn:disabled{opacity:.6; cursor:not-allowed}
-    .btn-secondary{background:#e5e7eb; color:#111}
-    .progress{height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; margin:16px 0 6px}
-    .bar{height:100%; background:var(--accent); width:0%}
-    .figure{display:flex; justify-content:center; align-items:center; margin:8px 0 14px}
-    .figure svg{max-width:100%; height:auto}
-    .q-title{font-size:20px; margin:6px 0 14px}
-    .opt{display:block; border:1.5px solid #e5e7eb; border-radius:12px; padding:12px 14px; margin:10px 0; cursor:pointer; transition:.15s}
-    .opt:hover{border-color:#c7d2fe; background:#f5f8ff}
-    .opt input{margin-right:10px}
-    .opt.correct{border-color:#a7f3d0; background:#ecfdf5}
-    .opt.wrong{border-color:#fecaca; background:#fef2f2}
-    .pill{display:inline-block; font-size:12px; padding:4px 10px; border-radius:999px; background:#eef2ff; color:#3730a3; margin-left:8px}
-    .explain{font-size:14px; color:#374151; padding:10px 12px; background:#f9fafb; border:1px dashed #e5e7eb; border-radius:10px; margin-top:8px}
-    .score{font-size:22px; font-weight:700}
-    footer{margin-top:18px; font-size:12px; color:#6b7280}
-    .hidden{display:none}
-    .spacer{height:8px}
-    .header{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
-    .title{display:flex; align-items:center; gap:8px}
-    .badge{font-size:12px; background:#eff6ff; color:#1e40af; padding:4px 8px; border-radius:8px}
-    .review-q{border-top:1px solid #eee; padding-top:12px; margin-top:12px}
-    .ok{color:var(--ok)} .bad{color:var(--bad)}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Гарри Поттер — угадай героя по фото (10 вопросов)</title>
+<meta name="description" content="Квиз на 10 вопросов по миру Гарри Поттера: угадай героя по фотографии актёра. Работает на iPhone, Android и ПК." />
+<style>
+  :root { --accent:#5b7cfa; --ok:#12b981; --bad:#ef4444; --ink:#0f172a; --muted:#475569; --card:#ffffff; --bg:#f6f7fb; }
+  *{box-sizing:border-box}
+  body{margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji',sans-serif; background:var(--bg); color:var(--ink);}
+  header{padding:20px 16px; text-align:center; background:linear-gradient(180deg,#fff,rgba(255,255,255,0));}
+  h1{margin:0 0 8px; font-size: clamp(22px, 4vw, 32px);}
+  p.lead{margin:0; color:var(--muted)}
+  main{max-width:1000px; margin:24px auto; padding:0 12px;}
+  .card{background:var(--card); border-radius:16px; padding:16px; box-shadow:0 6px 20px rgba(20,25,60,.06); margin-bottom:18px;}
+  .q-title{font-weight:600; margin:0 0 12px; font-size:18px;}
+  .grid{display:grid; grid-template-columns: 1fr 1fr; gap:12px;}
+  @media (min-width:720px){ .grid{grid-template-columns: repeat(4, 1fr);} }
+  .opt{position:relative; border:2px solid transparent; border-radius:14px; overflow:hidden; background:#f9fafb; cursor:pointer; outline:none; padding:0;}
+  .opt img{display:block; width:100%; height:180px; object-fit:cover;}
+  .opt .label{padding:8px 10px; font-size:13px; color:#111827; background:#fff;}
+  .credit{position:absolute; right:8px; bottom:36px; font-size:11px; background:rgba(255,255,255,.85); padding:4px 6px; border-radius:8px; color:#111827;}
+  .opt input{display:none;}
+  .opt.selected{border-color:var(--accent); box-shadow: 0 0 0 4px rgba(91,124,250,.12);}
+  .opt.correct{border-color:var(--ok);}
+  .opt.wrong{border-color:var(--bad); opacity:.9;}
+  .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; padding:12px;}
+  button.primary{background:var(--accent); color:#fff; border:none; border-radius:12px; padding:12px 18px; font-weight:600; cursor:pointer;}
+  button.ghost{background:transparent; border:1px solid #cbd5e1; border-radius:12px; padding:10px 14px; color:#0f172a; cursor:pointer;}
+  .score{font-weight:700;}
+  details.credits{margin:16px 0; font-size:13px; color:#334155;}
+  details summary{cursor:pointer; font-weight:600; margin-bottom:8px;}
+  footer{max-width:1000px; margin:24px auto; padding:0 12px 30px; color:#475569; font-size:13px;}
+  a{color:#1d4ed8; text-decoration:none}
+  a:hover{text-decoration:underline}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="header">
-      <div class="title">
-        <h1>Гарри Поттер — тест с изображениями (10 вопросов)</h1>
-        <span class="badge">10 вопросов</span>
-      </div>
-      <div><span class="muted">Готово для GitHub Pages и Telegram Mini App</span></div>
-    </div>
-    <div class="progress"><div id="bar" class="bar"></div></div>
-    <div class="muted" id="progressText">0 / 10</div>
-
-    <div id="screen-start" class="card">
-      <div class="spacer"></div>
-      <label class="muted">Имя участника (необязательно):</label>
-      <input id="playerName" placeholder="Например, Алёна" style="width:100%; padding:12px; border-radius:10px; border:1.5px solid #e5e7eb"/>
-      <div class="spacer"></div>
-      <div class="row">
-        <button id="btnStart" class="btn">Начать</button>
-        <button id="btnShuffle" class="btn-secondary">Перемешать вопросы</button>
-      </div>
-      <footer>Все изображения встроены как оригинальные SVG (без внешних файлов).</footer>
-    </div>
-
-    <div id="screen-quiz" class="card hidden">
-      <div class="muted">Вопрос <span id="qIdx">1</span> из <span id="qTotal">10</span></div>
-      <div class="figure" id="qFigure" aria-hidden="true"></div>
-      <div class="q-title" id="qTitle"></div>
-      <div id="qOptions"></div>
-      <div id="qExplain" class="explain hidden"></div>
-      <div class="row" style="margin-top:10px">
-        <button id="btnPrev" class="btn-secondary">Назад</button>
-        <div class="row">
-          <button id="btnReveal" class="btn-secondary">Пояснение</button>
-          <button id="btnNext" class="btn">Далее</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="screen-result" class="card hidden">
-      <div class="row">
-        <div class="score">Результат: <span id="score"></span></div>
-        <div class="pill" id="playerLabel"></div>
-      </div>
-      <div id="review"></div>
-      <div class="row" style="margin-top:12px">
-        <button class="btn" id="btnRetry">Пройти снова</button>
-        <button class="btn-secondary" id="btnShuffleRetry">Снова и перемешать</button>
-      </div>
-    </div>
+<header>
+  <h1>Гарри Поттер — угадай героя по фото</h1>
+  <p class="lead">10 вопросов. Нажимайте на фото, затем «Проверить»</p>
+</header>
+<main id="app"></main>
+<div class="actions card">
+  <button class="primary" id="checkBtn">Проверить ответы</button>
+  <button class="ghost" id="resetBtn">Сбросить</button>
+  <span class="score" id="scoreTxt"></span>
+</div>
+<footer>
+  <details class="credits">
+    <summary>Сведения об изображениях и лицензиях (Wikimedia Commons)</summary>
+    <div id="creditList"></div>
+  </details>
+  <div style="font-size:12px;opacity:.9">
+    Изображения использованы по свободным лицензиям, указаны авторы и ссылки на лицензии.
   </div>
-
+</footer>
 <script>
-const quiz = {
-  "quizgpt_version": 1,
-  "title": "Гарри Поттер — тест с изображениями (10 вопросов)",
-  "shuffle_questions": true,
-  "shuffle_options": true,
-  "questions": [
-    {
-      "question": "Какой из следующих ингредиентов НЕ используется в оборотном зелье (Polyjuice Potion)?",
-      "options": [
-        "Порошок из рога двурога (bicorn horn)",
-        "Измельчённая кожа бумсланга (boomslang skin)",
-        "Цветки наперстянки (foxglove)",
-        "Узколист (knotgrass) и настоянные на месяц крылышки стрекоз (lacewing flies)"
-      ],
-      "correct_index": 2,
-      "explanation": "В составе Polyjuice нет наперстянки; есть knotgrass, lacewing flies (выдержанные), leeches, powdered bicorn horn, shredded boomslang skin, fluxweed и «часть» цели.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Флакон зелья\">\n  <defs>\n    <linearGradient id=\"g1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#dbeafe\"/>\n      <stop offset=\"100%\" stop-color=\"#8b5cf6\"/>\n    </linearGradient>\n  </defs>\n  <g fill=\"none\" stroke=\"#1f2937\" stroke-width=\"2\">\n    <rect x=\"95\" y=\"10\" width=\"30\" height=\"22\" rx=\"4\" fill=\"#e5e7eb\"/>\n    <path d=\"M90 32 h40 v10 a10 10 0 0 1 -10 10 h-20 a10 10 0 0 1 -10 -10 v-10 z\" fill=\"#c7d2fe\"/>\n    <path d=\"M60 60 h100 v60 a30 30 0 0 1 -30 30 h-40 a30 30 0 0 1 -30 -30 v-60 z\" fill=\"url(#g1)\"/>\n    <circle cx=\"95\" cy=\"105\" r=\"6\" fill=\"#a78bfa\"/>\n    <circle cx=\"125\" cy=\"90\" r=\"5\" fill=\"#a78bfa\"/>\n  </g>\n</svg>\n",
-        "alt": "Флакон зелья"
-      }
-    },
-    {
-      "question": "Кто скрывается за инициалами R.A.B., оставившими записку в ложном медальоне?",
-      "options": [
-        "Руфус Аврелий Скримджер",
-        "Регулус Арктурус Блэк",
-        "Римус Артур Бил",
-        "Реджинальд Альбус Бёрк"
-      ],
-      "correct_index": 1,
-      "explanation": "R.A.B. — Регулус Арктурус Блэк, младший брат Сириуса.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Медальон\">\n  <defs>\n    <linearGradient id=\"gold\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#fde68a\"/>\n      <stop offset=\"100%\" stop-color=\"#f59e0b\"/>\n    </linearGradient>\n  </defs>\n  <g stroke=\"#92400e\" stroke-width=\"2\" fill=\"url(#gold)\">\n    <ellipse cx=\"110\" cy=\"90\" rx=\"55\" ry=\"40\"/>\n    <path d=\"M110 55 v-18\" stroke=\"#92400e\" stroke-width=\"4\"/>\n    <circle cx=\"110\" cy=\"32\" r=\"10\" fill=\"#fef3c7\" stroke=\"#92400e\"/>\n  </g>\n  <text x=\"110\" y=\"95\" text-anchor=\"middle\" font-family=\"serif\" font-size=\"28\" fill=\"#78350f\">S</text>\n</svg>\n",
-        "alt": "Медальон с буквой S"
-      }
-    },
-    {
-      "question": "Какой крестраж был уничтожен четвёртым по хронологии?",
-      "options": [
-        "Дневник Тома Реддла",
-        "Кольцо Марволо Гонта",
-        "Медальон Слизерина",
-        "Кубок Пуффендуй"
-      ],
-      "correct_index": 3,
-      "explanation": "Порядок: Дневник → Кольцо → Медальон → Кубок → Диадема → фрагмент в Гарри → Нагайна.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Кубок\">\n  <g stroke=\"#1f2937\" stroke-width=\"2\" fill=\"#f3f4f6\">\n    <path d=\"M70 40 h80 v20 a30 30 0 0 1 -30 30 h-20 a30 30 0 0 1 -30 -30 z\"/>\n    <rect x=\"95\" y=\"90\" width=\"30\" height=\"20\" rx=\"4\"/>\n    <rect x=\"85\" y=\"110\" width=\"50\" height=\"10\" rx=\"4\"/>\n  </g>\n  <text x=\"110\" y=\"78\" text-anchor=\"middle\" font-size=\"16\" fill=\"#6b7280\">Hufflepuff</text>\n</svg>\n",
-        "alt": "Силуэт кубка"
-      }
-    },
-    {
-      "question": "Что из перечисленного НЕ отображается на карте Мародёров?",
-      "options": [
-        "Перемещения людей по Хогвартсу",
-        "Секретные ходы",
-        "Комната по Требованию",
-        "Подземелья Слизерина"
-      ],
-      "correct_index": 2,
-      "explanation": "Комната по Требованию и те, кто внутри, не видны на карте.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Карта с шагами\">\n  <g stroke=\"#374151\" stroke-width=\"2\" fill=\"#fff7ed\">\n    <rect x=\"30\" y=\"30\" width=\"160\" height=\"100\" rx=\"8\"/>\n    <path d=\"M40 120 L180 40\" stroke-dasharray=\"6 6\"/>\n    <circle cx=\"60\" cy=\"100\" r=\"4\" fill=\"#ef4444\"/>\n    <circle cx=\"160\" cy=\"50\" r=\"4\" fill=\"#10b981\"/>\n    <path d=\"M60 100 q10 -15 20 0 q10 15 20 0 q10 -15 20 0\" fill=\"none\" stroke=\"#f59e0b\"/>\n  </g>\n</svg>\n",
-        "alt": "Карта с отметками и шагами"
-      }
-    },
-    {
-      "question": "Какую оценку получил Гарри по Зельеварению на СОВах?",
-      "options": [
-        "Выдающийся (O)",
-        "Превосходный (E)",
-        "Приемлемый (A)",
-        "Досконально (D)"
-      ],
-      "correct_index": 1,
-      "explanation": "По Зельям — E (Exceeds Expectations).",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Сертификат\">\n  <g stroke=\"#111827\" stroke-width=\"2\" fill=\"#ffffff\">\n    <rect x=\"40\" y=\"25\" width=\"140\" height=\"110\" rx=\"8\" fill=\"#f9fafb\"/>\n    <line x1=\"55\" y1=\"50\" x2=\"165\" y2=\"50\" stroke=\"#9ca3af\"/>\n    <line x1=\"55\" y1=\"70\" x2=\"165\" y2=\"70\" stroke=\"#9ca3af\"/>\n    <line x1=\"55\" y1=\"90\" x2=\"135\" y2=\"90\" stroke=\"#9ca3af\"/>\n    <circle cx=\"150\" cy=\"105\" r=\"12\" fill=\"#a7f3d0\" stroke=\"#10b981\"/>\n  </g>\n  <text x=\"110\" y=\"42\" text-anchor=\"middle\" font-size=\"14\" fill=\"#6b7280\">OWLs</text>\n</svg>\n",
-        "alt": "Сертификат экзамена"
-      }
-    },
-    {
-      "question": "Какое заклинание Гермиона наложила на фальшивые галеоны Д.А., чтобы обновления появлялись у всех членов?",
-      "options": [
-        "Geminio",
-        "Muffliato",
-        "Protean Charm (Заклинание Протея)",
-        "Portus"
-      ],
-      "correct_index": 2,
-      "explanation": "Заклинание Протея синхронизировало «сообщения» на монетах.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Монета\">\n  <defs>\n    <linearGradient id=\"coin\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#fde68a\"/>\n      <stop offset=\"100%\" stop-color=\"#f59e0b\"/>\n    </linearGradient>\n  </defs>\n  <g>\n    <circle cx=\"110\" cy=\"80\" r=\"45\" fill=\"url(#coin)\" stroke=\"#92400e\" stroke-width=\"2\"/>\n    <text x=\"110\" y=\"88\" text-anchor=\"middle\" font-size=\"28\" font-family=\"serif\" fill=\"#78350f\">DA</text>\n  </g>\n</svg>\n",
-        "alt": "Монета с буквами DA"
-      }
-    },
-    {
-      "question": "Какой породы дракон охранял хранилище Лестрейнджей в «Гринготтсе»?",
-      "options": [
-        "Венгерская хвосторога",
-        "Норвежский хребтоспин",
-        "Украинский железнобрюх",
-        "Уэльский зелёный"
-      ],
-      "correct_index": 2,
-      "explanation": "Ослеплённый украинский железнобрюх в подземельях банка.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Дракон\">\n  <path d=\"M30 110 q40 -60 90 -60 q40 0 70 -20 q-10 20 -20 30 q15 10 20 25 q-25 -5 -40 10 q-20 20 -60 20 q-30 0 -60 -5 z\" fill=\"#e5e7eb\" stroke=\"#111827\" stroke-width=\"2\"/>\n  <circle cx=\"165\" cy=\"53\" r=\"3\" fill=\"#ef4444\"/>\n</svg>\n",
-        "alt": "Силуэт дракона"
-      }
-    },
-    {
-      "question": "Что именно завещал Альбус Дамблдор Гермионе Грейнджер?",
-      "options": [
-        "Делюминатор",
-        "Меч Гриффиндора",
-        "Золотой снитч",
-        "«Сказки Барда Бидля»"
-      ],
-      "correct_index": 3,
-      "explanation": "Гермиона — «Сказки Барда Бидля», Рон — Делюминатор, Гарри — Снитч.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Книга\">\n  <g stroke=\"#1f2937\" stroke-width=\"2\" fill=\"#ffffff\">\n    <rect x=\"40\" y=\"40\" width=\"140\" height=\"80\" rx=\"6\" fill=\"#f9fafb\"/>\n    <path d=\"M110 40 v80\" />\n    <path d=\"M55 55 h45\" stroke=\"#9ca3af\"/>\n    <path d=\"M120 55 h45\" stroke=\"#9ca3af\"/>\n  </g>\n  <path d=\"M95 30 l10 10 l10 -10\" stroke=\"#8b5cf6\" stroke-width=\"3\" fill=\"none\"/>\n</svg>\n",
-        "alt": "Открытая книга"
-      }
-    },
-    {
-      "question": "Кем приходится Беллатрикс Лестрейндж Нимфадоре Тонкс?",
-      "options": [
-        "Двоюродной сестрой",
-        "Тётей",
-        "Кузиной",
-        "Сватей"
-      ],
-      "correct_index": 1,
-      "explanation": "Беллатрикс — сестра Андромеды Блэк (матери Тонкс).",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Родословное древо\">\n  <g fill=\"none\" stroke=\"#374151\" stroke-width=\"2\">\n    <circle cx=\"110\" cy=\"35\" r=\"10\" fill=\"#d1fae5\"/>\n    <line x1=\"110\" y1=\"45\" x2=\"80\" y2=\"75\"/>\n    <line x1=\"110\" y1=\"45\" x2=\"140\" y2=\"75\"/>\n    <circle cx=\"80\" cy=\"75\" r=\"10\" fill=\"#fee2e2\"/>\n    <circle cx=\"140\" cy=\"75\" r=\"10\" fill=\"#e0e7ff\"/>\n    <line x1=\"80\" y1=\"85\" x2=\"80\" y2=\"115\"/>\n    <line x1=\"140\" y1=\"85\" x2=\"140\" y2=\"115\"/>\n    <circle cx=\"80\" cy=\"115\" r=\"10\" fill=\"#fef3c7\"/>\n    <circle cx=\"140\" cy=\"115\" r=\"10\" fill=\"#fef3c7\"/>\n  </g>\n</svg>\n",
-        "alt": "Схема родословной"
-      }
-    },
-    {
-      "question": "Какова форма патронуса Северуса Снейпа?",
-      "options": [
-        "Олень",
-        "Лань (DOE)",
-        "Собака",
-        "Лисица"
-      ],
-      "correct_index": 1,
-      "explanation": "Патронус Снейпа — лань.",
-      "image": {
-        "type": "svg",
-        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Лань\">\n  <path d=\"M40 110 q30 -40 60 -40 q25 0 45 -15 q-8 12 -10 22 q18 5 25 18 q-20 0 -30 10 q-20 20 -50 20 q-20 0 -40 -5 z\" fill=\"#e0e7ff\" stroke=\"#1f2937\" stroke-width=\"2\"/>\n  <circle cx=\"140\" cy=\"75\" r=\"3\" fill=\"#6366f1\"/>\n</svg>\n",
-        "alt": "Силуэт лани"
-      }
-    }
-  ]
-};
+const PEOPLE = {"bonnie_wright": {"character": "Джинни Уизли", "actor": "Bonnie Wright", "file": "Bonnie_Wright_(34941047496).jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Bonnie_Wright_(34941047496).jpg", "author": "Gage Skidmore", "license_name": "CC BY-SA 2.0", "license_url": "https://creativecommons.org/licenses/by-sa/2.0"}, "emma_watson": {"character": "Гермиона Грейнджер", "actor": "Emma Watson", "file": "Emma_Watson_2013.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Emma_Watson_2013.jpg", "author": "Georges Biard", "license_name": "CC BY-SA 3.0", "license_url": "https://creativecommons.org/licenses/by-sa/3.0"}, "daniel_radcliffe": {"character": "Гарри Поттер", "actor": "Daniel Radcliffe", "file": "Daniel_Radcliffe_2014.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Daniel_Radcliffe_2014.jpg", "author": "Gage Skidmore", "license_name": "CC BY-SA 2.5", "license_url": "https://creativecommons.org/licenses/by-sa/2.5"}, "rupert_grint": {"character": "Рон Уизли", "actor": "Rupert Grint", "file": "Rupert_Grint_2011.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Rupert_Grint_2011.jpg", "author": "Joella Marano", "license_name": "CC BY-SA 2.0", "license_url": "https://creativecommons.org/licenses/by-sa/2.0"}, "tom_felton": {"character": "Драко Малфой", "actor": "Tom Felton", "file": "Tom_Felton_2.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Tom_Felton_2.jpg", "author": "Eva Rinaldi", "license_name": "CC BY-SA 2.0", "license_url": "https://creativecommons.org/licenses/by-sa/2.0"}, "evanna_lynch": {"character": "Полумна Лавгуд", "actor": "Evanna Lynch", "file": "Evanna_Lynch_Headshot_2018.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Evanna_Lynch_Headshot_2018.jpg", "author": "Toby Shaw (TobyShawPhoto)", "license_name": "CC BY-SA 4.0", "license_url": "https://creativecommons.org/licenses/by-sa/4.0"}, "matthew_lewis": {"character": "Невилл Долгопупс", "actor": "Matthew Lewis", "file": "Matthew_Lewis_(47963417312).jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Matthew_Lewis_(47963417312).jpg", "author": "Gage Skidmore", "license_name": "CC BY-SA 2.0", "license_url": "https://creativecommons.org/licenses/by-sa/2.0"}, "maggie_smith": {"character": "Минерва МакГонагалл", "actor": "Maggie Smith", "file": "Dame_Maggie_Smith.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Dame_Maggie_Smith.jpg", "author": "Kebl0597", "license_name": "CC BY-SA 3.0 (multi-licensed)", "license_url": "https://creativecommons.org/licenses/by-sa/3.0"}, "alan_rickman": {"character": "Северус Снейп", "actor": "Alan Rickman", "file": "Alan_Rickman_BAM_2011-01-15_n1.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Alan_Rickman_BAM_2011-01-15_n1.jpg", "author": "Marie-Lan Nguyen (Jastrow)", "license_name": "CC BY 3.0", "license_url": "https://creativecommons.org/licenses/by/3.0"}, "robbie_coltrane": {"character": "Рубеус Хагрид", "actor": "Robbie Coltrane", "file": "Robbiecoltrane.jpg", "file_page": "https://commons.wikimedia.org/wiki/File:Robbiecoltrane.jpg", "author": "clogdancer", "license_name": "CC BY-SA 2.0", "license_url": "https://creativecommons.org/licenses/by-sa/2.0"}};
+const QUESTIONS = [{"title": "Где Джинни Уизли? Выберите правильное фото.", "correct": "bonnie_wright", "choices": ["bonnie_wright", "emma_watson", "daniel_radcliffe", "rupert_grint"]}, {"title": "Где Гермиона Грейнджер?", "correct": "emma_watson", "choices": ["emma_watson", "evanna_lynch", "tom_felton", "matthew_lewis"]}, {"title": "Где Гарри Поттер?", "correct": "daniel_radcliffe", "choices": ["daniel_radcliffe", "rupert_grint", "tom_felton", "robbie_coltrane"]}, {"title": "Где Рон Уизли?", "correct": "rupert_grint", "choices": ["rupert_grint", "daniel_radcliffe", "matthew_lewis", "tom_felton"]}, {"title": "Где Драко Малфой?", "correct": "tom_felton", "choices": ["tom_felton", "daniel_radcliffe", "rupert_grint", "alan_rickman"]}, {"title": "Где Полумна Лавгуд?", "correct": "evanna_lynch", "choices": ["evanna_lynch", "emma_watson", "bonnie_wright", "maggie_smith"]}, {"title": "Где Невилл Долгопупс?", "correct": "matthew_lewis", "choices": ["matthew_lewis", "rupert_grint", "daniel_radcliffe", "tom_felton"]}, {"title": "Где профессор МакГонагалл?", "correct": "maggie_smith", "choices": ["maggie_smith", "emma_watson", "evanna_lynch", "bonnie_wright"]}, {"title": "Где Северус Снейп?", "correct": "alan_rickman", "choices": ["alan_rickman", "robbie_coltrane", "daniel_radcliffe", "tom_felton"]}, {"title": "Где Рубеус Хагрид?", "correct": "robbie_coltrane", "choices": ["robbie_coltrane", "alan_rickman", "daniel_radcliffe", "rupert_grint"]}];
 
-function deepCopy(obj){ return JSON.parse(JSON.stringify(obj)); }
-function shuffleInPlace(arr){
-  for(let i = arr.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-let state = {
-  idx: 0,
-  questions: [],
-  answers: [],
-  optionMaps: [],
-  revealed: []
-};
-function prepareQuestions(doShuffleQuestions=true, doShuffleOptions=true){
-  const q = deepCopy(quiz.questions);
-  if(doShuffleQuestions){ shuffleInPlace(q); }
-  state.questions = q;
-  state.answers = new Array(q.length).fill(null);
-  state.revealed = new Array(q.length).fill(false);
-  state.optionMaps = q.map(qq => {
-    const map = Array.from(qq.options, (_,i)=>i);
-    if(doShuffleOptions){ shuffleInPlace(map); }
-    return map;
-  });
-  renderProgress();
-}
-function renderProgress(){
-  const total = state.questions.length;
-  const answered = state.answers.filter(x => x !== null).length;
-  document.getElementById('progressText').textContent = answered + " / " + total;
-  document.getElementById('bar').style.width = Math.round(100*answered/Math.max(1,total)) + "%";
-}
-function showScreen(idToShow){
-  for(const id of ['screen-start','screen-quiz','screen-result']){ document.getElementById(id).classList.toggle('hidden', id !== idToShow); }
-}
-function renderQuestion(){
-  document.getElementById('qTotal').textContent = state.questions.length;
-  document.getElementById('qIdx').textContent = (state.idx+1);
-  const q = state.questions[state.idx];
-  // Image
-  const fig = document.getElementById('qFigure');
-  fig.innerHTML = "";
-  if(q.image && q.image.type === 'svg' && q.image.svg){
-    fig.innerHTML = q.image.svg;
-  }
-  // Title
-  document.getElementById('qTitle').textContent = q.question;
-  // Options
-  const container = document.getElementById('qOptions');
-  container.innerHTML = "";
-  const map = state.optionMaps[state.idx];
-  const selected = state.answers[state.idx];
-  map.forEach((origIndex, dispIndex)=>{
-    const id = `opt_${state.idx}_${dispIndex}`;
-    const label = document.createElement('label');
-    label.className = 'opt';
-    label.innerHTML = `<input type="radio" name="q${state.idx}" id="${id}"> ${q.options[origIndex]}`;
-    container.appendChild(label);
-    const input = label.querySelector('input');
-    input.addEventListener('change', ()=>{ state.answers[state.idx] = dispIndex; renderProgress(); });
-    if(selected === dispIndex){ input.checked = true; }
-  });
-  // Explain toggle
-  const ex = document.getElementById('qExplain');
-  ex.textContent = q.explanation || "";
-  ex.classList.toggle('hidden', !state.revealed[state.idx]);
-  // Nav
-  document.getElementById('btnPrev').disabled = (state.idx === 0);
-  document.getElementById('btnNext').textContent = (state.idx === state.questions.length - 1) ? "Завершить" : "Далее";
-}
-function computeScoreAndReview(){
-  const review = [];
-  let correctCount = 0;
-  for(let i=0;i<state.questions.length;i++){ 
-    const q = state.questions[i];
-    const map = state.optionMaps[i];
-    const userDisp = state.answers[i];
-    const userOrig = userDisp === null ? null : map[userDisp];
-    const isCorrect = (userOrig === q.correct_index);
-    if(isCorrect) correctCount++;
-    review.push({ q, map, userDisp, userOrig, isCorrect });
-  }
-  return { correctCount, review };
-}
-function renderResult(){
-  const { correctCount, review } = computeScoreAndReview();
-  document.getElementById('score').textContent = `${correctCount} / ${state.questions.length}`;
-  const player = document.getElementById('playerName').value.trim();
-  const label = document.getElementById('playerLabel');
-  label.textContent = player ? `Участник: ${player}` : "Аноним";
-  const root = document.getElementById('review');
-  root.innerHTML = "";
-  review.forEach((item, idx)=>{
-    const div = document.createElement('div');
-    div.className = 'review-q';
-    const mark = item.isCorrect ? `<span class="ok">Верно</span>` : `<span class="bad">Неверно</span>`;
-    div.innerHTML = `
-      <div class="muted">Вопрос ${idx+1}</div>
-      <div class="q-title">${item.q.question} ${mark}</div>
-    `;
-    item.map.forEach((origIndex, dispIndex)=>{
-      const p = document.createElement('div');
-      p.className = 'opt';
-      p.textContent = item.q.options[origIndex];
-      if(origIndex === item.q.correct_index){ p.classList.add('correct'); }
-      if(item.userDisp === dispIndex && origIndex !== item.q.correct_index){ p.classList.add('wrong'); }
-      div.appendChild(p);
+function imgURL(file){ return `https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=520`; }
+
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  QUESTIONS.forEach((q, qi) => {
+    const card = document.createElement('section');
+    card.className = 'card';
+    const title = document.createElement('div');
+    title.className = 'q-title';
+    title.textContent = `${qi+1}. ${q.title}`;
+    card.appendChild(title);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    q.choices.forEach((key) => {
+      const p = PEOPLE[key];
+      const opt = document.createElement('label');
+      opt.className = 'opt';
+      opt.dataset.key = key;
+      opt.dataset.qi = qi;
+
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = `q${qi}`;
+      input.value = key;
+      input.addEventListener('change', () => {
+        const group = app.querySelectorAll(`label.opt[data-qi="${qi}"]`);
+        group.forEach(el => el.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+
+      const img = document.createElement('img');
+      img.src = imgURL(p.file);
+      img.alt = `${p.actor} — ${p.character}`;
+      const credit = document.createElement('div');
+      credit.className = 'credit';
+      credit.innerHTML = `© ${p.author} / <a href="${p.license_url}" target="_blank" rel="noopener">${p.license_name}</a>`;
+
+      const lbl = document.createElement('div');
+      lbl.className = 'label';
+      lbl.textContent = p.actor;
+
+      opt.appendChild(input);
+      opt.appendChild(img);
+      opt.appendChild(credit);
+      opt.appendChild(lbl);
+      grid.appendChild(opt);
     });
-    if(item.q.explanation){
-      const ex = document.createElement('div');
-      ex.className = 'explain';
-      ex.textContent = item.q.explanation;
-      div.appendChild(ex);
-    }
-    root.appendChild(div);
+
+    card.appendChild(grid);
+    app.appendChild(card);
   });
+
+  const cred = document.getElementById('creditList');
+  cred.innerHTML = Object.values(PEOPLE).map(p => {
+    return `<div style="margin:6px 0">
+      <a href="${p.file_page}" target="_blank" rel="noopener">${p.actor}</a> — автор ${p.author}, лицензия 
+      <a href="${p.license_url}" target="_blank" rel="noopener">${p.license_name}</a>.
+    </div>`;
+  }).join('');
 }
-document.getElementById('btnStart').addEventListener('click', ()=>{ prepareQuestions(quiz.shuffle_questions, quiz.shuffle_options); showScreen('screen-quiz'); renderQuestion(); });
-document.getElementById('btnShuffle').addEventListener('click', ()=>{ prepareQuestions(true, true); alert('Вопросы и варианты будут перемешаны при старте.'); });
-document.getElementById('btnPrev').addEventListener('click', ()=>{ if(state.idx>0){ state.idx--; renderQuestion(); } });
-document.getElementById('btnNext').addEventListener('click', ()=>{ if(state.idx === state.questions.length-1){ showScreen('screen-result'); renderResult(); } else { state.idx++; renderQuestion(); } });
-document.getElementById('btnReveal').addEventListener('click', ()=>{ state.revealed[state.idx] = !state.revealed[state.idx]; document.getElementById('qExplain').classList.toggle('hidden'); });
-document.getElementById('btnRetry').addEventListener('click', ()=>{ state.idx = 0; state.answers.fill(null); state.revealed.fill(false); renderProgress(); showScreen('screen-quiz'); renderQuestion(); });
-document.getElementById('btnShuffleRetry').addEventListener('click', ()=>{ prepareQuestions(true, true); state.idx = 0; showScreen('screen-quiz'); renderQuestion(); });
+
+function check(){
+  let correct = 0;
+  QUESTIONS.forEach((q, qi) => {
+    const chosen = document.querySelector(`input[name="q${qi}"]:checked`);
+    const labels = document.querySelectorAll(`label.opt[data-qi="${qi}"]`);
+    labels.forEach(l => l.classList.remove('correct','wrong'));
+    if(!chosen) return;
+    labels.forEach(l => {
+      if(l.dataset.key === q.correct){ l.classList.add('correct'); }
+      else if(l.querySelector('input').checked){ l.classList.add('wrong'); }
+    });
+    if(chosen && chosen.value === q.correct) correct++;
+  });
+  document.getElementById('scoreTxt').textContent = `Результат: ${correct} из ${QUESTIONS.length}`;
+  window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+}
+
+function resetQuiz(){
+  document.querySelectorAll('input[type="radio"]').forEach(i=>{ i.checked=false; });
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected','correct','wrong'));
+  document.getElementById('scoreTxt').textContent='';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('checkBtn').addEventListener('click', check);
+document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+
+render();
 </script>
 </body>
 </html>
