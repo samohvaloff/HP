@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Гарри Поттер — сложный тест (10 вопросов)</title>
-  <meta name="description" content="Онлайн‑квиз. Откройте ссылку в браузере (iPhone/Android/ПК).">
+  <title>Гарри Поттер — тест с изображениями (10 вопросов)</title>
+  <meta name="description" content="Онлайн‑квиз с изображениями. Готов для GitHub Pages и Telegram Mini App.">
   <style>
-    :root { --fg:#111; --bg:#fafafa; --card:#fff; --muted:#666; --accent:#8b5cf6; --ok:#16a34a; --bad:#dc2626; }
+    :root { --fg:#111; --bg:#fafafa; --card:#fff; --muted:#667085; --accent:#8b5cf6; --ok:#16a34a; --bad:#dc2626; }
     *{box-sizing:border-box}
-    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans','Helvetica Neue',Arial; color:var(--fg); background:linear-gradient(180deg,#f0f4ff,#fafafa); min-height:100vh;}
-    .wrap{max-width:860px; margin:0 auto; padding:24px;}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans','Helvetica Neue',Arial; color:var(--fg); background:linear-gradient(180deg,#eef2ff,#fafafa); min-height:100vh;}
+    .wrap{max-width:900px; margin:0 auto; padding:24px;}
     .card{background:var(--card); border-radius:16px; box-shadow:0 10px 20px rgba(0,0,0,.06); padding:20px;}
     h1{font-size:26px; margin:0 0 8px}
     .muted{color:var(--muted)}
@@ -20,6 +20,8 @@
     .btn-secondary{background:#e5e7eb; color:#111}
     .progress{height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; margin:16px 0 6px}
     .bar{height:100%; background:var(--accent); width:0%}
+    .figure{display:flex; justify-content:center; align-items:center; margin:8px 0 14px}
+    .figure svg{max-width:100%; height:auto}
     .q-title{font-size:20px; margin:6px 0 14px}
     .opt{display:block; border:1.5px solid #e5e7eb; border-radius:12px; padding:12px 14px; margin:10px 0; cursor:pointer; transition:.15s}
     .opt:hover{border-color:#c7d2fe; background:#f5f8ff}
@@ -43,10 +45,10 @@
   <div class="wrap">
     <div class="header">
       <div class="title">
-        <h1>Гарри Поттер — сложный тест (10 вопросов)</h1>
+        <h1>Гарри Поттер — тест с изображениями (10 вопросов)</h1>
         <span class="badge">10 вопросов</span>
       </div>
-      <div><span class="muted">Онлайн-квиз: откройте ссылку в Safari/Chrome</span></div>
+      <div><span class="muted">Готово для GitHub Pages и Telegram Mini App</span></div>
     </div>
     <div class="progress"><div id="bar" class="bar"></div></div>
     <div class="muted" id="progressText">0 / 10</div>
@@ -60,16 +62,21 @@
         <button id="btnStart" class="btn">Начать</button>
         <button id="btnShuffle" class="btn-secondary">Перемешать вопросы</button>
       </div>
-      <footer>Совместимо с QuizGPT: JSON квиза внутри страницы.</footer>
+      <footer>Все изображения встроены как оригинальные SVG (без внешних файлов).</footer>
     </div>
 
     <div id="screen-quiz" class="card hidden">
       <div class="muted">Вопрос <span id="qIdx">1</span> из <span id="qTotal">10</span></div>
+      <div class="figure" id="qFigure" aria-hidden="true"></div>
       <div class="q-title" id="qTitle"></div>
       <div id="qOptions"></div>
+      <div id="qExplain" class="explain hidden"></div>
       <div class="row" style="margin-top:10px">
         <button id="btnPrev" class="btn-secondary">Назад</button>
-        <button id="btnNext" class="btn">Далее</button>
+        <div class="row">
+          <button id="btnReveal" class="btn-secondary">Пояснение</button>
+          <button id="btnNext" class="btn">Далее</button>
+        </div>
       </div>
     </div>
 
@@ -89,12 +96,11 @@
 <script>
 const quiz = {
   "quizgpt_version": 1,
-  "title": "Гарри Поттер — сложный тест (10 вопросов)",
+  "title": "Гарри Поттер — тест с изображениями (10 вопросов)",
   "shuffle_questions": true,
   "shuffle_options": true,
   "questions": [
     {
-      "type": "multiple_choice",
       "question": "Какой из следующих ингредиентов НЕ используется в оборотном зелье (Polyjuice Potion)?",
       "options": [
         "Порошок из рога двурога (bicorn horn)",
@@ -103,11 +109,14 @@ const quiz = {
         "Узколист (knotgrass) и настоянные на месяц крылышки стрекоз (lacewing flies)"
       ],
       "correct_index": 2,
-      "explanation": "В Polyjuice входят: knotgrass, lacewing flies (выдержанные), leeches, powdered bicorn horn, shredded boomslang skin, fluxweed (собранный в полнолуние) и часть того, в кого превращаются. Наперстянка не используется.",
-      "difficulty": "hard"
+      "explanation": "В составе Polyjuice нет наперстянки; есть knotgrass, lacewing flies (выдержанные), leeches, powdered bicorn horn, shredded boomslang skin, fluxweed и «часть» цели.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Флакон зелья\">\n  <defs>\n    <linearGradient id=\"g1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#dbeafe\"/>\n      <stop offset=\"100%\" stop-color=\"#8b5cf6\"/>\n    </linearGradient>\n  </defs>\n  <g fill=\"none\" stroke=\"#1f2937\" stroke-width=\"2\">\n    <rect x=\"95\" y=\"10\" width=\"30\" height=\"22\" rx=\"4\" fill=\"#e5e7eb\"/>\n    <path d=\"M90 32 h40 v10 a10 10 0 0 1 -10 10 h-20 a10 10 0 0 1 -10 -10 v-10 z\" fill=\"#c7d2fe\"/>\n    <path d=\"M60 60 h100 v60 a30 30 0 0 1 -30 30 h-40 a30 30 0 0 1 -30 -30 v-60 z\" fill=\"url(#g1)\"/>\n    <circle cx=\"95\" cy=\"105\" r=\"6\" fill=\"#a78bfa\"/>\n    <circle cx=\"125\" cy=\"90\" r=\"5\" fill=\"#a78bfa\"/>\n  </g>\n</svg>\n",
+        "alt": "Флакон зелья"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Кто скрывается за инициалами R.A.B., оставившими записку в ложном медальоне?",
       "options": [
         "Руфус Аврелий Скримджер",
@@ -116,11 +125,14 @@ const quiz = {
         "Реджинальд Альбус Бёрк"
       ],
       "correct_index": 1,
-      "explanation": "R.A.B. — Регулус Арктурус Блэк, младший брат Сириуса Блэка.",
-      "difficulty": "hard"
+      "explanation": "R.A.B. — Регулус Арктурус Блэк, младший брат Сириуса.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Медальон\">\n  <defs>\n    <linearGradient id=\"gold\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#fde68a\"/>\n      <stop offset=\"100%\" stop-color=\"#f59e0b\"/>\n    </linearGradient>\n  </defs>\n  <g stroke=\"#92400e\" stroke-width=\"2\" fill=\"url(#gold)\">\n    <ellipse cx=\"110\" cy=\"90\" rx=\"55\" ry=\"40\"/>\n    <path d=\"M110 55 v-18\" stroke=\"#92400e\" stroke-width=\"4\"/>\n    <circle cx=\"110\" cy=\"32\" r=\"10\" fill=\"#fef3c7\" stroke=\"#92400e\"/>\n  </g>\n  <text x=\"110\" y=\"95\" text-anchor=\"middle\" font-family=\"serif\" font-size=\"28\" fill=\"#78350f\">S</text>\n</svg>\n",
+        "alt": "Медальон с буквой S"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Какой крестраж был уничтожен четвёртым по хронологии?",
       "options": [
         "Дневник Тома Реддла",
@@ -129,11 +141,14 @@ const quiz = {
         "Кубок Пуффендуй"
       ],
       "correct_index": 3,
-      "explanation": "Порядок: Дневник (1993), Кольцо (1996), Медальон (декабрь 1997), затем Кубок Пуффендуй (1 мая 1998 в Хогвартсе), далее Диадема, фрагмент в Гарри, последней — Нагайна.",
-      "difficulty": "hard"
+      "explanation": "Порядок: Дневник → Кольцо → Медальон → Кубок → Диадема → фрагмент в Гарри → Нагайна.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Кубок\">\n  <g stroke=\"#1f2937\" stroke-width=\"2\" fill=\"#f3f4f6\">\n    <path d=\"M70 40 h80 v20 a30 30 0 0 1 -30 30 h-20 a30 30 0 0 1 -30 -30 z\"/>\n    <rect x=\"95\" y=\"90\" width=\"30\" height=\"20\" rx=\"4\"/>\n    <rect x=\"85\" y=\"110\" width=\"50\" height=\"10\" rx=\"4\"/>\n  </g>\n  <text x=\"110\" y=\"78\" text-anchor=\"middle\" font-size=\"16\" fill=\"#6b7280\">Hufflepuff</text>\n</svg>\n",
+        "alt": "Силуэт кубка"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Что из перечисленного НЕ отображается на карте Мародёров?",
       "options": [
         "Перемещения людей по Хогвартсу",
@@ -142,11 +157,14 @@ const quiz = {
         "Подземелья Слизерина"
       ],
       "correct_index": 2,
-      "explanation": "Комната по Требованию не отображается на карте; люди внутри тоже не видны.",
-      "difficulty": "hard"
+      "explanation": "Комната по Требованию и те, кто внутри, не видны на карте.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Карта с шагами\">\n  <g stroke=\"#374151\" stroke-width=\"2\" fill=\"#fff7ed\">\n    <rect x=\"30\" y=\"30\" width=\"160\" height=\"100\" rx=\"8\"/>\n    <path d=\"M40 120 L180 40\" stroke-dasharray=\"6 6\"/>\n    <circle cx=\"60\" cy=\"100\" r=\"4\" fill=\"#ef4444\"/>\n    <circle cx=\"160\" cy=\"50\" r=\"4\" fill=\"#10b981\"/>\n    <path d=\"M60 100 q10 -15 20 0 q10 15 20 0 q10 -15 20 0\" fill=\"none\" stroke=\"#f59e0b\"/>\n  </g>\n</svg>\n",
+        "alt": "Карта с отметками и шагами"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Какую оценку получил Гарри по Зельеварению на СОВах?",
       "options": [
         "Выдающийся (O)",
@@ -155,11 +173,14 @@ const quiz = {
         "Досконально (D)"
       ],
       "correct_index": 1,
-      "explanation": "Гарри получил E (Exceeds Expectations) по Зельям; O было по ЗОТИ.",
-      "difficulty": "hard"
+      "explanation": "По Зельям — E (Exceeds Expectations).",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Сертификат\">\n  <g stroke=\"#111827\" stroke-width=\"2\" fill=\"#ffffff\">\n    <rect x=\"40\" y=\"25\" width=\"140\" height=\"110\" rx=\"8\" fill=\"#f9fafb\"/>\n    <line x1=\"55\" y1=\"50\" x2=\"165\" y2=\"50\" stroke=\"#9ca3af\"/>\n    <line x1=\"55\" y1=\"70\" x2=\"165\" y2=\"70\" stroke=\"#9ca3af\"/>\n    <line x1=\"55\" y1=\"90\" x2=\"135\" y2=\"90\" stroke=\"#9ca3af\"/>\n    <circle cx=\"150\" cy=\"105\" r=\"12\" fill=\"#a7f3d0\" stroke=\"#10b981\"/>\n  </g>\n  <text x=\"110\" y=\"42\" text-anchor=\"middle\" font-size=\"14\" fill=\"#6b7280\">OWLs</text>\n</svg>\n",
+        "alt": "Сертификат экзамена"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Какое заклинание Гермиона наложила на фальшивые галеоны Д.А., чтобы обновления появлялись у всех членов?",
       "options": [
         "Geminio",
@@ -168,24 +189,30 @@ const quiz = {
         "Portus"
       ],
       "correct_index": 2,
-      "explanation": "Использовано Заклинание Протея — сложная магия уровня НУТ, позволившая синхронизировать номера/сообщения на монетах.",
-      "difficulty": "hard"
+      "explanation": "Заклинание Протея синхронизировало «сообщения» на монетах.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Монета\">\n  <defs>\n    <linearGradient id=\"coin\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#fde68a\"/>\n      <stop offset=\"100%\" stop-color=\"#f59e0b\"/>\n    </linearGradient>\n  </defs>\n  <g>\n    <circle cx=\"110\" cy=\"80\" r=\"45\" fill=\"url(#coin)\" stroke=\"#92400e\" stroke-width=\"2\"/>\n    <text x=\"110\" y=\"88\" text-anchor=\"middle\" font-size=\"28\" font-family=\"serif\" fill=\"#78350f\">DA</text>\n  </g>\n</svg>\n",
+        "alt": "Монета с буквами DA"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Какой породы дракон охранял хранилище Лестрейнджей в «Гринготтсе»?",
       "options": [
-        "Венгерская хвосторога (Hungarian Horntail)",
-        "Норвежский хребтоспин (Norwegian Ridgeback)",
-        "Украинский железнобрюх (Ukrainian Ironbelly)",
-        "Уэльский зелёный (Common Welsh Green)"
+        "Венгерская хвосторога",
+        "Норвежский хребтоспин",
+        "Украинский железнобрюх",
+        "Уэльский зелёный"
       ],
       "correct_index": 2,
-      "explanation": "Подземелья «Гринготтса» охранял ослеплённый украинский железнобрюх.",
-      "difficulty": "hard"
+      "explanation": "Ослеплённый украинский железнобрюх в подземельях банка.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Дракон\">\n  <path d=\"M30 110 q40 -60 90 -60 q40 0 70 -20 q-10 20 -20 30 q15 10 20 25 q-25 -5 -40 10 q-20 20 -60 20 q-30 0 -60 -5 z\" fill=\"#e5e7eb\" stroke=\"#111827\" stroke-width=\"2\"/>\n  <circle cx=\"165\" cy=\"53\" r=\"3\" fill=\"#ef4444\"/>\n</svg>\n",
+        "alt": "Силуэт дракона"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Что именно завещал Альбус Дамблдор Гермионе Грейнджер?",
       "options": [
         "Делюминатор",
@@ -194,11 +221,14 @@ const quiz = {
         "«Сказки Барда Бидля»"
       ],
       "correct_index": 3,
-      "explanation": "Гермиона получила «Сказки Барда Бидля», Рон — Делюминатор, Гарри — Снитч (а меч юридически не мог быть завещан).",
-      "difficulty": "hard"
+      "explanation": "Гермиона — «Сказки Барда Бидля», Рон — Делюминатор, Гарри — Снитч.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Книга\">\n  <g stroke=\"#1f2937\" stroke-width=\"2\" fill=\"#ffffff\">\n    <rect x=\"40\" y=\"40\" width=\"140\" height=\"80\" rx=\"6\" fill=\"#f9fafb\"/>\n    <path d=\"M110 40 v80\" />\n    <path d=\"M55 55 h45\" stroke=\"#9ca3af\"/>\n    <path d=\"M120 55 h45\" stroke=\"#9ca3af\"/>\n  </g>\n  <path d=\"M95 30 l10 10 l10 -10\" stroke=\"#8b5cf6\" stroke-width=\"3\" fill=\"none\"/>\n</svg>\n",
+        "alt": "Открытая книга"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Кем приходится Беллатрикс Лестрейндж Нимфадоре Тонкс?",
       "options": [
         "Двоюродной сестрой",
@@ -207,11 +237,14 @@ const quiz = {
         "Сватей"
       ],
       "correct_index": 1,
-      "explanation": "Беллатрикс — сестра Андромеды Блэк, матери Тонкс; следовательно — тётя.",
-      "difficulty": "hard"
+      "explanation": "Беллатрикс — сестра Андромеды Блэк (матери Тонкс).",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Родословное древо\">\n  <g fill=\"none\" stroke=\"#374151\" stroke-width=\"2\">\n    <circle cx=\"110\" cy=\"35\" r=\"10\" fill=\"#d1fae5\"/>\n    <line x1=\"110\" y1=\"45\" x2=\"80\" y2=\"75\"/>\n    <line x1=\"110\" y1=\"45\" x2=\"140\" y2=\"75\"/>\n    <circle cx=\"80\" cy=\"75\" r=\"10\" fill=\"#fee2e2\"/>\n    <circle cx=\"140\" cy=\"75\" r=\"10\" fill=\"#e0e7ff\"/>\n    <line x1=\"80\" y1=\"85\" x2=\"80\" y2=\"115\"/>\n    <line x1=\"140\" y1=\"85\" x2=\"140\" y2=\"115\"/>\n    <circle cx=\"80\" cy=\"115\" r=\"10\" fill=\"#fef3c7\"/>\n    <circle cx=\"140\" cy=\"115\" r=\"10\" fill=\"#fef3c7\"/>\n  </g>\n</svg>\n",
+        "alt": "Схема родословной"
+      }
     },
     {
-      "type": "multiple_choice",
       "question": "Какова форма патронуса Северуса Снейпа?",
       "options": [
         "Олень",
@@ -220,8 +253,12 @@ const quiz = {
         "Лисица"
       ],
       "correct_index": 1,
-      "explanation": "Патронус Снейпа — лань (самка оленя), отражение его чувств к Лили Эванс.",
-      "difficulty": "hard"
+      "explanation": "Патронус Снейпа — лань.",
+      "image": {
+        "type": "svg",
+        "svg": "\n<svg width=\"220\" height=\"160\" viewBox=\"0 0 220 160\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Лань\">\n  <path d=\"M40 110 q30 -40 60 -40 q25 0 45 -15 q-8 12 -10 22 q18 5 25 18 q-20 0 -30 10 q-20 20 -50 20 q-20 0 -40 -5 z\" fill=\"#e0e7ff\" stroke=\"#1f2937\" stroke-width=\"2\"/>\n  <circle cx=\"140\" cy=\"75\" r=\"3\" fill=\"#6366f1\"/>\n</svg>\n",
+        "alt": "Силуэт лани"
+      }
     }
   ]
 };
@@ -238,13 +275,15 @@ let state = {
   idx: 0,
   questions: [],
   answers: [],
-  optionMaps: []
+  optionMaps: [],
+  revealed: []
 };
 function prepareQuestions(doShuffleQuestions=true, doShuffleOptions=true){
   const q = deepCopy(quiz.questions);
   if(doShuffleQuestions){ shuffleInPlace(q); }
   state.questions = q;
   state.answers = new Array(q.length).fill(null);
+  state.revealed = new Array(q.length).fill(false);
   state.optionMaps = q.map(qq => {
     const map = Array.from(qq.options, (_,i)=>i);
     if(doShuffleOptions){ shuffleInPlace(map); }
@@ -256,8 +295,7 @@ function renderProgress(){
   const total = state.questions.length;
   const answered = state.answers.filter(x => x !== null).length;
   document.getElementById('progressText').textContent = answered + " / " + total;
-  const pct = Math.round((answered/Math.max(1,total))*100);
-  document.getElementById('bar').style.width = pct + "%";
+  document.getElementById('bar').style.width = Math.round(100*answered/Math.max(1,total)) + "%";
 }
 function showScreen(idToShow){
   for(const id of ['screen-start','screen-quiz','screen-result']){ document.getElementById(id).classList.toggle('hidden', id !== idToShow); }
@@ -266,12 +304,20 @@ function renderQuestion(){
   document.getElementById('qTotal').textContent = state.questions.length;
   document.getElementById('qIdx').textContent = (state.idx+1);
   const q = state.questions[state.idx];
+  // Image
+  const fig = document.getElementById('qFigure');
+  fig.innerHTML = "";
+  if(q.image && q.image.type === 'svg' && q.image.svg){
+    fig.innerHTML = q.image.svg;
+  }
+  // Title
   document.getElementById('qTitle').textContent = q.question;
+  // Options
   const container = document.getElementById('qOptions');
   container.innerHTML = "";
-  const optMap = state.optionMaps[state.idx];
+  const map = state.optionMaps[state.idx];
   const selected = state.answers[state.idx];
-  optMap.forEach((origIndex, dispIndex)=>{
+  map.forEach((origIndex, dispIndex)=>{
     const id = `opt_${state.idx}_${dispIndex}`;
     const label = document.createElement('label');
     label.className = 'opt';
@@ -281,6 +327,11 @@ function renderQuestion(){
     input.addEventListener('change', ()=>{ state.answers[state.idx] = dispIndex; renderProgress(); });
     if(selected === dispIndex){ input.checked = true; }
   });
+  // Explain toggle
+  const ex = document.getElementById('qExplain');
+  ex.textContent = q.explanation || "";
+  ex.classList.toggle('hidden', !state.revealed[state.idx]);
+  // Nav
   document.getElementById('btnPrev').disabled = (state.idx === 0);
   document.getElementById('btnNext').textContent = (state.idx === state.questions.length - 1) ? "Завершить" : "Далее";
 }
@@ -289,12 +340,12 @@ function computeScoreAndReview(){
   let correctCount = 0;
   for(let i=0;i<state.questions.length;i++){ 
     const q = state.questions[i];
-    const optMap = state.optionMaps[i];
+    const map = state.optionMaps[i];
     const userDisp = state.answers[i];
-    const userOrig = userDisp === null ? null : optMap[userDisp];
+    const userOrig = userDisp === null ? null : map[userDisp];
     const isCorrect = (userOrig === q.correct_index);
     if(isCorrect) correctCount++;
-    review.push({ q, optMap, userDisp, userOrig, isCorrect });
+    review.push({ q, map, userDisp, userOrig, isCorrect });
   }
   return { correctCount, review };
 }
@@ -314,7 +365,7 @@ function renderResult(){
       <div class="muted">Вопрос ${idx+1}</div>
       <div class="q-title">${item.q.question} ${mark}</div>
     `;
-    item.optMap.forEach((origIndex, dispIndex)=>{
+    item.map.forEach((origIndex, dispIndex)=>{
       const p = document.createElement('div');
       p.className = 'opt';
       p.textContent = item.q.options[origIndex];
@@ -335,7 +386,8 @@ document.getElementById('btnStart').addEventListener('click', ()=>{ prepareQuest
 document.getElementById('btnShuffle').addEventListener('click', ()=>{ prepareQuestions(true, true); alert('Вопросы и варианты будут перемешаны при старте.'); });
 document.getElementById('btnPrev').addEventListener('click', ()=>{ if(state.idx>0){ state.idx--; renderQuestion(); } });
 document.getElementById('btnNext').addEventListener('click', ()=>{ if(state.idx === state.questions.length-1){ showScreen('screen-result'); renderResult(); } else { state.idx++; renderQuestion(); } });
-document.getElementById('btnRetry').addEventListener('click', ()=>{ state.idx = 0; state.answers.fill(null); renderProgress(); showScreen('screen-quiz'); renderQuestion(); });
+document.getElementById('btnReveal').addEventListener('click', ()=>{ state.revealed[state.idx] = !state.revealed[state.idx]; document.getElementById('qExplain').classList.toggle('hidden'); });
+document.getElementById('btnRetry').addEventListener('click', ()=>{ state.idx = 0; state.answers.fill(null); state.revealed.fill(false); renderProgress(); showScreen('screen-quiz'); renderQuestion(); });
 document.getElementById('btnShuffleRetry').addEventListener('click', ()=>{ prepareQuestions(true, true); state.idx = 0; showScreen('screen-quiz'); renderQuestion(); });
 </script>
 </body>
